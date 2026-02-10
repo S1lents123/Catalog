@@ -30,7 +30,7 @@ export default async function handler(req, res) {
   }
 
   // Construimos candidatos (Roblox cambia qué params acepta por bucket)
-  const base = new URL("https://catalog.roblox.com/v1/search/items/details");
+  const base = new URL("https://www.roblox.com/es/catalog?taxonomy=kfHzJwaNYM8s2CWRqYUhRa&salesTypeFilter=1");
   base.searchParams.set("SortType", "3");
   base.searchParams.set("SortAggregation", "5");
   base.searchParams.set("SalesTypeFilter", "1");
