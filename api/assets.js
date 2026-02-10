@@ -1,0 +1,25 @@
+export default async function handler(req, res) {
+  const auth = req.headers["x-auth"];
+  if (!process.env.AUTH_TOKEN || auth !== process.env.AUTH_TOKEN) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  const limit = Math.min(Math.max(parseInt(req.query.limit || "30", 10), 1), 30);
+  const cursor = req.query.cursor || "";
+  const keyword = req.query.keyword || "";
+  const assetTypes = req.query.assetTypes || ""; // "8,41,42,..."
+
+  const target = new URL("https://catalog.roblox.com/v1/search/items/details");
+  target.searchParams.set("Category", "0");
+  target.searchParams.set("SortType", "3");
+  target.searchParams.set("SortAggregation", "5");
+  target.searchParams.set("SalesTypeFilter", "1");
+  target.searchParams.set("Limit", String(limit));
+  if (cursor) target.searchParams.set("Cursor", cursor);
+  if (keyword) target.searchParams.set("Keyword", keyword);
+  if (assetTypes) target.searchParams.set("AssetTypes", assetTypes);
+
+  const r = await fetch(target.toString(), { headers: { "Content-Type": "application/json" } });
+  const text = await r.text();
+  res.status(r.status).setHeader("Content-Type", "application/json").send(text);
+}
