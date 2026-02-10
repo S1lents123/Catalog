@@ -15,9 +15,9 @@ export default async function handler(req, res) {
   const cursor = req.query.cursor || "";
   const keyword = req.query.keyword || "";
 
-  // Para bundles usamos Category=3 (Bundles). Si falla en tu región/build, lo ajustamos.
+  // IMPORTANT: pedimos BUNDLES explícitamente
   const target = new URL("https://catalog.roblox.com/v1/search/items/details");
-  target.searchParams.set("Category", "3");
+  target.searchParams.set("ItemType", "Bundle");         // <- clave
   target.searchParams.set("SortType", "3");
   target.searchParams.set("SortAggregation", "5");
   target.searchParams.set("SalesTypeFilter", "1");
